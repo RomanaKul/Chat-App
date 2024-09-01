@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { comparePassword, hashPassword } from "./utils/helpers.mjs";
+import WebSocket, { WebSocketServer } from "ws";
 
 dotenv.config();
 mongoose
@@ -82,4 +83,36 @@ app.post("/login", async (req, res) => {
   });
 });
 
-app.listen(3000);
+const server = app.listen(3000);
+
+const wss = new WebSocketServer({ server });
+wss.on("connection", (connection, req) => {
+  const cookies = req.headers.cookie;
+  if (cookies) {
+    const cookieTokenString = cookies
+      .split(";")
+      .find((str) => str.startsWith("token="));
+    if (cookieTokenString) {
+      const token = cookieTokenString.split("=")[1];
+      if (token) {
+        jwt.verify(token, jwtSecret, {}, (err, userData) => {
+          if (err) throw err;
+          const { userId, username } = userData;
+          connection.userId = userId;
+          connection.username = username;
+        });
+      }
+    }
+  }
+
+  [...wss.clients].forEach((client) => {
+    client.send(
+      JSON.stringify({
+        online: [...wss.clients].map((c) => ({
+          userId: c.userId,
+          username: c.username,
+        })),
+      })
+    );
+  });
+});
