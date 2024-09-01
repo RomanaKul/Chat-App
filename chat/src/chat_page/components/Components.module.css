@@ -1,0 +1,38 @@
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(245, 237, 224);
+  color: rgb(40, 33, 27);
+  font-size: 20px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.button {
+  color: rgb(40, 33, 27);
+  background-color: rgb(245, 237, 224);
+  height: 45px;
+  width: 60px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-size: 30px;
+  outline: none;
+}
+
+.input {
+  width: 100%;
+  height: 45px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-size: 20px;
+  color: rgb(40, 33, 27);
+  outline: none;
+  background-color: rgb(245, 237, 224);
+  flex-grow: 1;
+  box-sizing: border-box;
+}
