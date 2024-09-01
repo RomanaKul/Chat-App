@@ -1,0 +1,18 @@
+.chatContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.leftContainer {
+  width: 30%;
+  background-color: rgb(66, 53, 41);
+  border-right: 3px solid rgb(40, 33, 27);
+}
+
+.rightContainer {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  background-color: rgb(245, 237, 224);
+}
