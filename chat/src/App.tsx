@@ -1,10 +1,16 @@
+import axios from "axios";
 import "./App.css";
-import Login from "./Login/Login";
+import { UserContextProvider } from "./user/UserContext";
+import Routes from "./routes/Routes";
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.withCredentials = true;
   return (
     <>
-      <Login />
+      <UserContextProvider>
+        <Routes />
+      </UserContextProvider>
     </>
   );
 }

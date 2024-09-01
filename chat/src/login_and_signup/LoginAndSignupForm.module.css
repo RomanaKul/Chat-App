@@ -48,3 +48,20 @@
   cursor: pointer;
   outline: 2px solid rgb(82, 75, 62);
 }
+
+.text {
+  margin: 20px;
+  color: rgb(82, 75, 62);
+  font-size: 20px;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 20px;
+  padding: 0;
+  color: rgb(82, 75, 62);
+  text-decoration: underline;
+  cursor: pointer;
+}
