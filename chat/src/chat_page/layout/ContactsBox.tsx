@@ -27,11 +27,20 @@ export default function ContactsBox({
   const { id } = useContext(UserContext);
 
   useEffect(() => {
+    connectToWs();
+  }, []);
+
+  function connectToWs() {
     const ws = new WebSocket("ws://localhost:3000");
     setWs(ws);
     ws.addEventListener("message", handleMessage);
-  }, []);
-
+    ws.addEventListener("close", () =>
+      setTimeout(() => {
+        console.log("Reconnecting...");
+        connectToWs();
+      }, 1000)
+    );
+  }
   function showOnlinePeople(peopleArr: { userId: string; username: string }[]) {
     const people: { [key: string]: string } = {};
     peopleArr.forEach(

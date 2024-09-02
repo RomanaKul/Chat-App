@@ -2,12 +2,13 @@ import style from "./Layout.module.css";
 import { Message } from "../../chat_page/ChatPage";
 import { uniqBy } from "lodash";
 import { UserContext } from "../../user/UserContext";
-import { useContext, useEffect, useId, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { BiSolidSend } from "react-icons/bi";
 import IconButton from "../components/IconButton";
 import StyledInput from "../components/StyledInput";
 import { Avatar } from "../components/Avatar";
 import { SelectedUser } from "../../chat_page/ChatPage";
+import axios from "axios";
 
 interface ChatBoxProps {
   selectedUser?: SelectedUser;
@@ -27,9 +28,8 @@ export default function ChatBox({
   setMessages,
 }: ChatBoxProps) {
   const { id } = useContext(UserContext);
-  const key = useId();
   const autoScrollRef = useRef<HTMLDivElement>(null);
-  const messagesWithoutDupes = uniqBy(messages, "id");
+  const messagesWithoutDupes = uniqBy(messages, "_id");
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -50,7 +50,7 @@ export default function ChatBox({
         text: newMessage,
         sender: id || "",
         recipient: selectedUser?.id || "",
-        id: Date.now().toString(),
+        _id: Date.now().toString(),
       },
     ]);
   }
@@ -63,6 +63,14 @@ export default function ChatBox({
       });
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (selectedUser) {
+      axios.get("/messages/" + selectedUser?.id).then((res) => {
+        setMessages(res.data);
+      });
+    }
+  }, [selectedUser]);
 
   return (
     <>
@@ -86,15 +94,13 @@ export default function ChatBox({
           <div>
             {messagesWithoutDupes.map((message: Message) => (
               <div
-                key={key}
+                key={message._id}
                 className={`${style.message} ${
                   message.sender === id
                     ? style.my_message
                     : style.message_from_contact
                 }`}
               >
-                sender: {message.sender} <br />
-                my id: {id} <br />
                 {message.text}
               </div>
             ))}

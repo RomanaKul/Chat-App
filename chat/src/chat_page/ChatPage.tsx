@@ -8,7 +8,7 @@ export interface Message {
   text?: string;
   sender?: string;
   recipient?: string;
-  id?: string;
+  _id?: string;
 }
 
 export interface SelectedUser {
