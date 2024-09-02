@@ -60,6 +60,11 @@ app.get("/messages/:userId", async (req, res) => {
   res.json(messages);
 });
 
+app.get("/people", async (req, res) => {
+  const users = await User.find({}, { _id: 1, username: 1 });
+  res.json(users);
+});
+
 app.get("/profile", (req, res) => {
   const token = req.cookies?.token;
   if (token) {
@@ -107,6 +112,10 @@ app.post("/login", async (req, res) => {
     if (err) throw err;
     res.cookie("token", token).status(201).json({ id: foundUser._id });
   });
+});
+
+app.post("/logout", (req, res) => {
+  res.cookie("token", "").status(200).send("ok");
 });
 
 const server = app.listen(3000);
