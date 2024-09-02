@@ -5,15 +5,24 @@ import { useContext } from "react";
 import { UserContext } from "../../user/UserContext";
 import style from "./Layout.module.css";
 import { Avatar } from "../components/Avatar";
+import axios from "axios";
 
 export default function ProfileHeader() {
-  const { username } = useContext(UserContext);
+  const { username, setId, setUsername } = useContext(UserContext);
+
+  function handleLogout() {
+    axios.post("/logout").then(() => {
+      setId(null);
+      setUsername(null);
+    });
+  }
+
   return (
     <div className={style.profile_header_container}>
       <div className={style.hf_container}>
-        <Avatar username={username || "Guest"} />
+        <Avatar online={true} username={username || "Guest"} />
         <h2 className={style.username}>{username}</h2>
-        <IconButton icon={<IoLogOut />} />
+        <IconButton onClick={handleLogout} icon={<IoLogOut />} />
       </div>
       <div className={style.search}>
         <StyledInput placeholder={"Search..."} />

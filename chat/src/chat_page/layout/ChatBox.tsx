@@ -9,6 +9,7 @@ import StyledInput from "../components/StyledInput";
 import { Avatar } from "../components/Avatar";
 import { SelectedUser } from "../../chat_page/ChatPage";
 import axios from "axios";
+import { Person } from "../../chat_page/ChatPage";
 
 interface ChatBoxProps {
   selectedUser?: SelectedUser;
@@ -17,6 +18,10 @@ interface ChatBoxProps {
   newMessage: string;
   setNewMessage: React.Dispatch<React.SetStateAction<string>>;
   ws: WebSocket | null;
+  onlinePeople: { [key: string]: string };
+  setOfflinePeople: React.Dispatch<
+    React.SetStateAction<Record<string, Person>>
+  >;
 }
 
 export default function ChatBox({
@@ -26,6 +31,8 @@ export default function ChatBox({
   setNewMessage,
   ws,
   setMessages,
+  onlinePeople,
+  setOfflinePeople,
 }: ChatBoxProps) {
   const { id } = useContext(UserContext);
   const autoScrollRef = useRef<HTMLDivElement>(null);
@@ -65,6 +72,19 @@ export default function ChatBox({
   }, [messages]);
 
   useEffect(() => {
+    axios.get("/people").then((res) => {
+      const offlinePeopleArr = res.data
+        .filter((person: Person) => person._id !== id)
+        .filter((person: Person) => !onlinePeople[person._id]);
+      const offlinePeople: Record<string, Person> = {};
+      offlinePeopleArr.forEach((person: Person) => {
+        offlinePeople[person._id] = person;
+        setOfflinePeople(offlinePeople);
+      });
+    });
+  }, [onlinePeople]);
+
+  useEffect(() => {
     if (selectedUser) {
       axios.get("/messages/" + selectedUser?.id).then((res) => {
         setMessages(res.data);
@@ -77,7 +97,14 @@ export default function ChatBox({
       <div className={style.hf_container}>
         {selectedUser ? (
           <>
-            <Avatar username={selectedUser?.username || "Guest"} />
+            <Avatar
+              online={
+                Object.keys(onlinePeople).includes(selectedUser?.id)
+                  ? true
+                  : false
+              }
+              username={selectedUser?.username || "Guest"}
+            />
             <p className={style.username}>
               {selectedUser?.username || "Guest"}
             </p>

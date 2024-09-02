@@ -16,12 +16,22 @@ export interface SelectedUser {
   id: string;
 }
 
+export interface Person {
+  _id: string;
+  username: string;
+}
+
 export default function ChatPage() {
-  // const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<SelectedUser>();
   const [newMessage, setNewMessage] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [onlinePeople, setOnlinePeople] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [offlinePeople, setOfflinePeople] = useState<Record<string, Person>>(
+    {}
+  );
 
   return (
     <div className={style.chatContainer}>
@@ -32,6 +42,9 @@ export default function ChatPage() {
           setSelectedUser={setSelectedUser}
           setWs={setWs}
           setMessages={setMessages}
+          onlinePeople={onlinePeople}
+          setOnlinePeople={setOnlinePeople}
+          offlinePeople={offlinePeople}
         />
       </div>
       <div className={style.rightContainer}>
@@ -42,6 +55,8 @@ export default function ChatPage() {
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           setMessages={setMessages}
+          onlinePeople={onlinePeople}
+          setOfflinePeople={setOfflinePeople}
         />
       </div>
     </div>

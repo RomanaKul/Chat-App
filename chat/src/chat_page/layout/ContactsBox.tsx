@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import style from "./Layout.module.css";
-import { Avatar } from "../components/Avatar";
+import Contacts from "../components/Contacts";
 import { UserContext } from "../../user/UserContext";
 import { Message } from "../../chat_page/ChatPage";
 import { SelectedUser } from "../../chat_page/ChatPage";
+import { Person } from "../../chat_page/ChatPage";
 
 interface ContactsBoxProps {
   selectedUser?: SelectedUser;
@@ -12,6 +13,11 @@ interface ContactsBoxProps {
   >;
   setWs: React.Dispatch<React.SetStateAction<WebSocket | null>>;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  onlinePeople: { [key: string]: string };
+  offlinePeople: Record<string, Person>;
+  setOnlinePeople: React.Dispatch<
+    React.SetStateAction<{ [key: string]: string }>
+  >;
 }
 
 export default function ContactsBox({
@@ -19,11 +25,10 @@ export default function ContactsBox({
   setSelectedUser,
   setWs,
   setMessages,
+  onlinePeople,
+  setOnlinePeople,
+  offlinePeople,
 }: ContactsBoxProps) {
-  const [onlinePeople, setOnlinePeople] = useState<{ [key: string]: string }>(
-    {}
-  );
-
   const { id } = useContext(UserContext);
 
   useEffect(() => {
@@ -68,18 +73,35 @@ export default function ContactsBox({
       <h2 className={style.contacts_header}>Chats</h2>
       <div className={style.contacts_container}>
         {Object.keys(onlinePplExclLogUser).map((userId) => (
-          <div
+          <Contacts
             key={userId}
+            id={userId}
+            username={onlinePplExclLogUser[userId]}
+            selected={userId === selectedUser?.id}
+            online={true}
             onClick={() =>
-              setSelectedUser({ username: onlinePeople[userId], id: userId })
+              setSelectedUser({
+                id: userId,
+                username: onlinePplExclLogUser[userId],
+              })
             }
-            className={`${style.contact} ${
-              selectedUser?.id === userId ? style.selected_contact : ""
-            }`}
-          >
-            <Avatar username={onlinePeople[userId]} />
-            <p>{onlinePeople[userId]}</p>
-          </div>
+          />
+        ))}
+
+        {Object.keys(offlinePeople).map((userId) => (
+          <Contacts
+            key={userId}
+            id={userId}
+            username={offlinePeople[userId].username}
+            selected={userId === selectedUser?.id}
+            online={false}
+            onClick={() =>
+              setSelectedUser({
+                id: userId,
+                username: offlinePeople[userId].username,
+              })
+            }
+          />
         ))}
       </div>
     </div>
