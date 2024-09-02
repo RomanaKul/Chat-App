@@ -16,7 +16,7 @@ export default function ProfileHeader() {
         <IconButton icon={<IoLogOut />} />
       </div>
       <div className={style.search}>
-        <StyledInput text={"Search..."} />
+        <StyledInput placeholder={"Search..."} />
       </div>
     </div>
   );

@@ -1,5 +1,24 @@
 import style from "./Components.module.css";
 
-export default function StyledInput({ text }: { text: string }) {
-  return <input className={style.input} type="text" placeholder={text} />;
+interface StyledInputProps {
+  placeholder: string;
+  type?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+export default function StyledInput({
+  placeholder,
+  type = "text",
+  value,
+  onChange,
+}: StyledInputProps) {
+  return (
+    <input
+      className={style.input}
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+    />
+  );
 }

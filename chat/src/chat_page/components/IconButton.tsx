@@ -1,5 +1,14 @@
 import style from "./Components.module.css";
 
-export default function IconButton({ icon }: { icon: JSX.Element }) {
-  return <button className={style.button}>{icon}</button>;
+interface IconButtonProps {
+  icon: JSX.Element;
+  type?: "button" | "submit" | "reset" | undefined;
+}
+
+export default function IconButton({ icon, type }: IconButtonProps) {
+  return (
+    <button type={type} className={style.button}>
+      {icon}
+    </button>
+  );
 }
