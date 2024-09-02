@@ -23,6 +23,13 @@
   outline: none;
 }
 
+.button:hover,
+.button:focus {
+  cursor: pointer;
+  color: rgb(245, 237, 224);
+  background-color: rgb(40, 33, 27);
+}
+
 .input {
   width: 100%;
   height: 45px;

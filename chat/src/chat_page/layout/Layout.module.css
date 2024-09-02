@@ -1,3 +1,14 @@
+.hf_container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 80px;
+  background-color: rgb(66, 53, 41);
+  padding: 20px;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
 .profile_header_container {
   display: flex;
   flex-direction: column;
@@ -51,6 +62,13 @@
   height: 40px;
 }
 
+.contact:hover,
+.contact:focus {
+  background-color: rgb(40, 33, 27);
+  color: rgb(245, 237, 224);
+  cursor: pointer;
+}
+
 .contact span {
   background-color: rgb(40, 33, 27);
   color: rgb(245, 237, 224);
@@ -60,16 +78,42 @@
   border-bottom: none;
 }
 
-.chat_box_container {
-  flex-grow: 1;
+.selected_contact {
+  background-color: rgb(40, 33, 27);
+  color: rgb(245, 237, 224);
 }
 
-.hf_container {
+.chat_box_container {
+  flex-grow: 1;
+  overflow-y: auto;
   display: flex;
+  flex-direction: column;
+}
+
+.select_user_message {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 100%;
-  background-color: rgb(66, 53, 41);
-  padding: 20px;
-  gap: 10px;
-  box-sizing: border-box;
+  height: 100%;
+}
+
+.message {
+  color: rgb(14, 14, 13);
+  padding: 15px;
+  border-radius: 12px;
+  margin: 10px;
+  word-wrap: break-word;
+  max-width: 50%;
+}
+
+.my_message {
+  clear: both;
+  float: right;
+  background-color: rgba(87, 71, 56, 0.725);
+}
+
+.message_from_contact {
+  clear: both;
+  float: left;
+  background-color: rgba(185, 174, 157, 0.552);
 }
